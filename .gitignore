@@ -1,0 +1,5 @@
+Session.vim
+.vimrc
+*.png
+*.svg
+__pycache__/
