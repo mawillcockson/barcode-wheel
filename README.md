@@ -6,7 +6,7 @@ Makes barcode-wheels
 
 - Pipenv recommended
 - Python 3.7+
-- [zint](https://zint.co.uk/)
+- [zint](https://zint.org.uk/)
 
 # Problems
 
