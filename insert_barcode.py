@@ -1,14 +1,15 @@
 import svgwrite
-import pathlib
 from lxml.etree import parse
 import subprocess
 import shlex
 import re
 from collections import namedtuple
+from io import StringIO
 
-subprocess.run(shlex.split("zint -o barcode --filetype=svg --barcode=34 --notext -d '12345678901'"))
+zint_output = subprocess.run(shlex.split("zint --direct --filetype=svg --barcode=34 --notext -d '12345678901'"), stdout=subprocess.PIPE)
+zint_barcode = StringIO(zint_output.stdout.decode('utf8'))
 
-tree = parse(str(pathlib.Path('./barcode.svg')))
+tree = parse(zint_barcode)
 root = tree.getroot()
 g = [x for x in root.getchildren() if x.tag == '{http://www.w3.org/2000/svg}g'][0]
 
@@ -25,7 +26,7 @@ group = barcode.g(id='barcode', fill=g.attrib['fill'])
 for elem in g:
     if 'text' in elem.tag:
         continue
-    
+
     tag_name = tag_re.search(elem.tag)
     if not tag_name:
         breakpoint()
@@ -46,8 +47,8 @@ for elem in g:
 
     if tag_name == 'rect':
         group.add(barcode.rect(insert=(rect_tuple.x, rect_tuple.y),
-                                 size=(rect_tuple.width, rect_tuple.height),
-                                 fill=rect_tuple.fill))
+                               size=(rect_tuple.width, rect_tuple.height),
+                               fill=rect_tuple.fill))
 
 barcode.add(group)
 barcode.save()

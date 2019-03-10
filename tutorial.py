@@ -1,5 +1,5 @@
 import svgwrite
-from svgwrite import inch, cm
+from svgwrite import cm
 from svgwrite.shapes import Circle, Rect
 from svgwrite.path import Path
 
@@ -10,7 +10,7 @@ from math import sin, cos, tan, pi
 drawing = svgwrite.Drawing(filename='svgwrite_test.svg', profile='tiny', debug=True)
 
 # Globals
-width=height=1000
+width = height = 1000
 
 # Draw bounding box
 drawing.add(Rect(insert=(0, 0), size=(width, height), fill='none', stroke='black', stroke_width=1))
@@ -54,6 +54,7 @@ def draw_slice(center, radius, start_angle, stop_angle, **kwargs):
 #                       stroke='black',
 #                       stroke_width=2))
 
+
 slices = drawing.defs.add(drawing.g(id='slices'))
 slices.add(draw_slice(center=(0, 0),
                       radius=width/2.0 - 50,
@@ -63,7 +64,7 @@ slices.add(draw_slice(center=(0, 0),
                       stroke='black',
                       stroke_width=2))
 
-for angle in range(0,360,10):
+for angle in range(0, 360, 10):
     u = drawing.use(slices, insert=(width/2.0+40, height/2.0))
     u.rotate(angle, center=(width/2.0, height/2.0))
     drawing.add(u)
