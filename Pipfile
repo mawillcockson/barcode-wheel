@@ -4,12 +4,37 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "*"
-black = "==18.9b0"
+neovim = "*"
+jedi = "*"
+mypy-mypyc = "*"
+flake8 = "*"
+pylint = "*"
+black = "*"
+vulture = "*"
+#pytest = "*"
+#eradicate = "*"
+#bandit = "*"
+#vulture = "*"
+#safety = "*"
+#dodgy = "*"
+#pyt = "*"
+#python-afl = "*"
+#coala-bears = "*"
+#pytest-cov = "*"
+#yapf = "*"
+#isort = "*"
+#flake8-bugbear = "*"
+#flake8-docstrings = "*"
+#pylama = "*"
+#pyflakes = "*"
 
 [packages]
 svgwrite = "*"
+wand = "*"
 lxml = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

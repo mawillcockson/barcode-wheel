@@ -1,5 +1,7 @@
 Session.vim
-.vimrc
+.lvimrc
 *.png
 *.svg
+*.csv
 __pycache__/
+.mypy_cache/
