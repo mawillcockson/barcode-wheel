@@ -7,9 +7,10 @@ Makes barcode-wheels
 - Pipenv recommended
 - Python 3.7+
 - [zint](https://zint.org.uk/)
+- [HarfBuzz built with GObject introspection](https://github.com/harfbuzz/harfbuzz/blob/master/README.python.md)
+- fontconfig
 
 # Problems
 
-- Import zint barcodes for insertion into current document's `<use>` tag
-- Insert pictures without requiring finding the dimensions and explicitly hardcoding them
+- SVG` -> `PDF
 - Verify correctness of barcode-wheels
