@@ -30,8 +30,12 @@ vulture = "*"
 
 [packages]
 svgwrite = "*"
-wand = "*"
 lxml = "*"
+freetype-py = "*"
+svgpathtools = "*"
+fontconfig = {git = "https://github.com/ldo/python_fontconfig.git"}
+# Need gobject-introspection and harfbuzz packages installed before installing this
+pygobject = "*"
 
 [requires]
 python_version = "3.7"

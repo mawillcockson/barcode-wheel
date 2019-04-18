@@ -1,6 +1,7 @@
 Session.vim
 .lvimrc
 *.png
+*.gif
 *.svg
 *.csv
 __pycache__/

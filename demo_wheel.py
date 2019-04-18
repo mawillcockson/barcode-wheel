@@ -32,12 +32,7 @@ def main():
     )
 
     pie, placeholders = barcode_wheel.draw_pie(
-        center=(100, 100),
-        radius=100,
-        num_slices=9,
-        fill="none",
-        stroke="black",
-        stroke_width=0.5,
+        center=(100, 100), radius=100, num_slices=9
     )
     drawing.add(pie)
     drawing.save()
