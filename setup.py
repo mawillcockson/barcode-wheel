@@ -1,6 +1,6 @@
 # Install with python setup.py install
 
-from distutils.command.build import build
+from distutils.command.install import install
 from distutils.core import setup
 from os import path
 from urllib import request
@@ -11,13 +11,14 @@ import tarfile
 import tempfile
 
 
-class Build(build):
+class Install(install):
     def run(self):
-        temp_dir = tempfile.mkdtemp()
-        print(temp_dir)
-        owd = os.getcwd()
+        orig_cwd = os.getcwd()
+
+        # Install zint
         try:
-            # Build zint
+            temp_dir = tempfile.mkdtemp()
+            print(temp_dir)
             with request.urlopen('https://downloads.sourceforge.net/project/zint/zint/2.6.3/zint-2.6.3.src.tar.gz') as resp:
                 with tarfile.open(fileobj=resp, mode='r:gz') as tar:
                     tar.extractall(path=temp_dir)
@@ -26,11 +27,25 @@ class Build(build):
             os.chdir(build_dir)
             subprocess.check_call(('cmake', '..'))
             subprocess.check_call(('make',))
-            # TODO: Continue here. Save the binaries so that the install step can place them in the
-            # in pipenv binary folder.
+            subprocess.check_call(('make', 'install/local')) # Need to specify install path here
+
+            # TODO: Figure out how to solve the dyld errors
+            #
+            # dyld: Library not loaded: /private/var/folders/f1/mfv95cpj0vgg2rm80ycr846w0000gm/T/tmpf32a0pl7/zint-2.6.3.src/build/backend/libzint.2.6.dylib
+            # Referenced from: /Users/mgbelisle/.local/share/virtualenvs/barcode-wheel-8IXH-5lV/bin/zint
+            # Reason: image not found
+            # [1]    54367 abort      zint --help
+            if not os.path.isdir(self.install_scripts):
+                os.makedirs(self.install_scripts)
+            src = path.join('frontend', 'zint')
+            dest = path.join(self.install_scripts, 'zint')
+            if path.isfile(dest):
+                os.remove(dest)
+            self.move_file(src, dest)
             shutil.rmtree(temp_dir)
         finally:
-            os.chdir(owd)
+            os.chdir(orig_cwd)
+
         super().run()
         
 setup(
@@ -38,6 +53,6 @@ setup(
     version='0.0.1',
     author='Matt Willcockson',
     cmdclass={
-        'build': Build,
+        'install': Install,
     }
 )
