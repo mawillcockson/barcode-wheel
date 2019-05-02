@@ -36,7 +36,6 @@ svgpathtools = "*"
 fontconfig = {git = "https://github.com/ldo/python_fontconfig.git"}
 # Need gobject-introspection and harfbuzz packages installed before installing this
 pygobject = "*"
-barcode-wheel = {path = ".",editable = true}
 
 [requires]
 python_version = "3.7"

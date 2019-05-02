@@ -4,6 +4,11 @@ Makes barcode-wheels
 
 # Requirements
 
+```sh
+pipenv install
+python setup.py install
+```
+
 - Pipenv recommended
 - Python 3.7+
 - [zint](https://zint.org.uk/)
