@@ -4,6 +4,7 @@ from distutils.command.install import install
 from distutils.core import setup
 from os import path
 from urllib import request
+import io
 import os
 import shutil
 import subprocess
@@ -33,6 +34,30 @@ class Install(install):
         os.symlink(src, dest)
         shutil.rmtree(temp_dir)
 
+        # Install harfbuzz
+        temp_dir = tempfile.mkdtemp()
+        with request.urlopen('https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-2.4.0.tar.bz2') as resp:
+            # BytesIO is needed because bz2 does a seek()
+            with tarfile.open(fileobj=io.BytesIO(resp.read()), mode='r:bz2') as tar:
+                tar.extractall(path=temp_dir)
+        build_dir = path.join(temp_dir, os.listdir(temp_dir)[0])
+        install_dir = path.join(self.install_base, 'harfbuzz')
+        shutil.rmtree(install_dir, ignore_errors=True)
+        os.makedirs(install_dir)
+        orig_cwd = os.getcwd()
+        os.chdir(build_dir)
+        subprocess.check_call((
+            path.join(build_dir, 'configure'),
+            '--with-gobject',
+            '--enable-introspection',
+            '--prefix', install_dir,
+        ))
+        subprocess.check_call(('make',))
+        subprocess.check_call(('make', 'install'))
+        os.chdir(orig_cwd)
+        # TODO: Something else needed here probably
+        shutil.rmtree(temp_dir)        
+        
         super().run()
         
 setup(
