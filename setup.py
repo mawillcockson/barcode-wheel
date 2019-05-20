@@ -55,9 +55,30 @@ class Install(install):
         subprocess.check_call(('make',))
         subprocess.check_call(('make', 'install'))
         os.chdir(orig_cwd)
-        # TODO: Something else needed here probably
-        shutil.rmtree(temp_dir)        
-        
+        # TODO: Something else needed here maybe?
+        shutil.rmtree(temp_dir)
+
+        # Install fontconfig
+        temp_dir = tempfile.mkdtemp()
+        with request.urlopen('https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz') as resp:
+            with tarfile.open(fileobj=resp, mode='r:gz') as tar:
+                tar.extractall(path=temp_dir)
+        build_dir = path.join(temp_dir, os.listdir(temp_dir)[0])
+        install_dir = path.join(self.install_base, 'fontconfig')
+        shutil.rmtree(install_dir, ignore_errors=True)
+        os.makedirs(install_dir)
+        orig_cwd = os.getcwd()
+        os.chdir(build_dir)
+        subprocess.check_call((
+            path.join(build_dir, 'configure'),
+            '--prefix', install_dir,
+        ))
+        subprocess.check_call(('make',))
+        subprocess.check_call(('make', 'install'))
+        os.chdir(orig_cwd)
+        # TODO: Something else needed here maybe?
+        shutil.rmtree(temp_dir)
+
         super().run()
         
 setup(
